@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}AgroSmart AI - Crop Recommendation System{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">AI crop recommendation system</p>
+        <h1>Professional crop planning from soil and climate data.</h1>
+        <p class="hero-text">
+            AgroSmart AI predicts the most suitable crop using NPK values, temperature,
+            humidity, pH, and rainfall. It includes farmer login, saved recommendation
+            history, and an IoT field sensor integration for live farm data.
+        </p>
+        <div class="hero-actions">
+            {% if session.get("user_id") %}
+                <a class="button large" href="{{ url_for('dashboard') }}">Start Project Demo</a>
+            {% else %}
+                <a class="button large" href="{{ url_for('register') }}">Start Project Demo</a>
+                <a class="button large ghost" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-panel" aria-label="Example crop recommendation">
+        <div class="sensor-grid">
+            <div><span>Nitrogen</span><strong>90 kg/ha</strong></div>
+            <div><span>Humidity</span><strong>82%</strong></div>
+            <div><span>pH</span><strong>6.5</strong></div>
+            <div><span>Rainfall</span><strong>203 mm</strong></div>
+        </div>
+        <div class="prediction-card">
+            <span>Recommended crop</span>
+            <strong>Rice</strong>
+            <p>Confidence 91.4% from nearest crop-pattern analysis.</p>
+        </div>
+    </div>
+</section>
+
+<section class="metrics">
+    <div>
+        <span>Dataset in use</span>
+        <strong>Crop_recommendation.csv</strong>
+        <p>{{ "{:,}".format(dataset_status.rows) }} records loaded.</p>
+    </div>
+    <div>
+        <span>Backend</span>
+        <strong>Flask + SQLite</strong>
+        <p>Stores users, secure passwords, and recommendation history.</p>
+    </div>
+    <div>
+        <span>IoT ready</span>
+        <strong>Field sensor module</strong>
+        <p>Designed for NPK, pH, rainfall, temperature, and humidity devices.</p>
+    </div>
+</section>
+{% endblock %}

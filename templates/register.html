@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Register - AgriSense AI{% endblock %}
+{% block content %}
+<section class="auth-layout">
+    <div>
+        <p class="eyebrow">Farmer account</p>
+        <h1>Create an account</h1>
+        <p>Each farmer gets private recommendation history, report downloads, and saved IoT readings.</p>
+    </div>
+    <form class="form-card" method="post">
+        <label>Name
+            <input type="text" name="name" placeholder="Farmer name" required>
+        </label>
+        <label>Email
+            <input type="email" name="email" placeholder="farmer@example.com" required>
+        </label>
+        <label>Password
+            <input type="password" name="password" placeholder="Minimum 6 characters" minlength="6" required>
+        </label>
+        <button class="button full" type="submit">Create Account</button>
+        <p class="form-note">Already registered? <a href="{{ url_for('login') }}">Login here</a>.</p>
+    </form>
+</section>
+{% endblock %}

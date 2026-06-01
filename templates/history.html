@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}History - AgriSense AI{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Stored backend data</p>
+        <h1>Recommendation History</h1>
+        <p>Every analysis is saved to your farmer account. Reuse old values or open a printable report.</p>
+    </div>
+    <a class="button" href="{{ url_for('dashboard') }}">New Analysis</a>
+</section>
+{% include "partials/history_table.html" %}
+
+<section class="reference-section compact">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Reference</p>
+            <h2>Mineral Ranges</h2>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Low</th>
+                    <th>Ideal</th>
+                    <th>High</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in mineral_references %}
+                    <tr>
+                        <td><strong>{{ item.name }}</strong></td>
+                        <td>{{ item.low }}</td>
+                        <td>{{ item.ideal }}</td>
+                        <td>{{ item.high }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

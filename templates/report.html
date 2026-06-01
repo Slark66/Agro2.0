@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Field Report - AgriSense AI{% endblock %}
+{% block content %}
+<section class="report-header no-print">
+    <div>
+        <h1>Field Recommendation Report</h1>
+        <p>Based on your soil profile and environmental parameters</p>
+    </div>
+    <div class="report-actions">
+        <a class="button ghost" href="{{ url_for('dashboard') }}">New Analysis</a>
+        <button class="button ghost" onclick="window.print()">Print</button>
+        <a class="button" href="{{ url_for('report_pdf', recommendation_id=item.id) }}">Download PDF</a>
+    </div>
+</section>
+
+<article class="report-sheet">
+    <section class="recommendation-hero">
+        <div class="crop-symbol">{{ item.crop[:1] }}</div>
+        <div>
+            <div class="badge-row">
+                <span class="badge">AI Recommended</span>
+                <span class="badge outline">Highest Suitability</span>
+            </div>
+            <h2>{{ item.crop }}</h2>
+            <p>Confidence Score <strong>{{ item.confidence }}%</strong></p>
+            <div class="confidence"><span style="width: {{ item.confidence }}%"></span></div>
+            <p>{{ item.details.details.notes }}</p>
+        </div>
+    </section>
+
+    <section class="report-grid">
+        <div class="result-panel">
+            <h3>Top Alternative Crops</h3>
+            {% if item.details.alternatives %}
+                <ul class="alt-list">
+                    {% for alt in item.details.alternatives %}
+                        <li><span>{{ alt.crop }}</span><strong>{{ alt.score }}%</strong></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No close alternatives were found for this field profile.</p>
+            {% endif %}
+        </div>
+        <div class="result-panel soil-card">
+            <h3>Overall Soil Health</h3>
+            <strong class="health-label">{{ item.soil_health.label }}</strong>
+            <div class="health-meter"><span style="width: {{ item.soil_health.score }}%"></span></div>
+            <div class="indicator-grid">
+                {% for indicator in item.soil_health.indicators %}
+                    <div class="{{ indicator.class }}">
+                        <span>{{ indicator.name }}</span>
+                        <strong>{{ indicator.status }}</strong>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="result-panel">
+        <h3>Soil Health Assessment</h3>
+        <p>Detailed nutrient analysis with visual indicators</p>
+        <div class="bar-list">
+            <div><span>Nitrogen</span><meter min="0" max="200" value="{{ item.nitrogen }}"></meter><strong>{{ item.nitrogen|round(1) }}</strong></div>
+            <div><span>Phosphorus</span><meter min="0" max="200" value="{{ item.phosphorus }}"></meter><strong>{{ item.phosphorus|round(1) }}</strong></div>
+            <div><span>Potassium</span><meter min="0" max="250" value="{{ item.potassium }}"></meter><strong>{{ item.potassium|round(1) }}</strong></div>
+            <div><span>Soil pH</span><meter min="0" max="14" value="{{ item.ph }}"></meter><strong>{{ item.ph|round(1) }}</strong></div>
+        </div>
+    </section>
+
+    <section class="result-panel">
+        <h3>Recommendation Summary</h3>
+        <div class="summary-grid">
+            <div><span>Recommended Crop</span><strong>{{ item.crop }}</strong></div>
+            <div><span>Confidence</span><strong>{{ item.confidence }}%</strong></div>
+            <div><span>Soil Health</span><strong>{{ item.soil_health.label }}</strong></div>
+            <div><span>Nitrogen</span><strong>{{ item.nitrogen|round(1) }} kg/ha</strong></div>
+            <div><span>Temperature</span><strong>{{ item.temperature|round(1) }} C</strong></div>
+            <div><span>Humidity</span><strong>{{ item.humidity|round(1) }}%</strong></div>
+            <div><span>Soil pH</span><strong>{{ item.ph|round(1) }}</strong></div>
+            <div><span>Rainfall</span><strong>{{ item.rainfall|round(1) }} mm</strong></div>
+            <div><span>Generated</span><strong>{{ item.created_at }}</strong></div>
+        </div>
+    </section>
+</article>
+{% endblock %}

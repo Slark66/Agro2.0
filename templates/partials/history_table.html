@@ -1,0 +1,38 @@
+{% if history %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Crop</th>
+                    <th>Confidence</th>
+                    <th>NPK</th>
+                    <th>Climate</th>
+                    <th>pH / Rainfall</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                    <tr>
+                        <td>{{ item.created_at }}</td>
+                        <td><strong>{{ item.crop }}</strong></td>
+                        <td>{{ item.confidence }}%</td>
+                        <td>{{ item.nitrogen|round(1) }} / {{ item.phosphorus|round(1) }} / {{ item.potassium|round(1) }}</td>
+                        <td>{{ item.temperature|round(1) }} C, {{ item.humidity|round(1) }}%</td>
+                        <td>{{ item.ph|round(1) }} / {{ item.rainfall|round(1) }} mm</td>
+                        <td class="table-actions">
+                            <a href="{{ url_for('dashboard', history_id=item.id) }}">Reuse</a>
+                            <a href="{{ url_for('report', recommendation_id=item.id) }}">Report</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>No recommendations saved yet</h2>
+        <p>Generate your first crop recommendation from the analysis page.</p>
+    </div>
+{% endif %}

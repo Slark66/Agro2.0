@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Analysis - AgriSense AI{% endblock %}
+{% block content %}
+<section class="page-heading centered">
+    <p class="trust-pill">Field Analysis</p>
+    <h1>Enter Field Parameters</h1>
+    <p>Provide soil nutrient levels and environmental conditions to receive a precision AI-generated crop recommendation.</p>
+</section>
+
+<section class="analysis-layout">
+    <form class="form-card wide" method="post">
+        <div class="card-title">
+            <span class="mini-icon leaf"></span>
+            <div>
+                <h2>Soil & Environmental Data</h2>
+                <p>All values should reflect the field's current conditions or seasonal averages.</p>
+            </div>
+        </div>
+
+        {% if latest_iot %}
+            <div class="inline-notice">
+                Latest IoT reading is available.
+                <a href="{{ url_for('dashboard', source='iot') }}">Use sensor values</a>
+            </div>
+        {% endif %}
+
+        <h3 class="fieldset-title">Soil Nutrients</h3>
+        <div class="form-grid three">
+            <label>Nitrogen (N) <span>kg/ha</span>
+                <input type="number" name="N" min="0" max="200" step="0.1" value="{{ prefill.N }}" required>
+            </label>
+            <label>Phosphorus (P) <span>kg/ha</span>
+                <input type="number" name="P" min="0" max="200" step="0.1" value="{{ prefill.P }}" required>
+            </label>
+            <label>Potassium (K) <span>kg/ha</span>
+                <input type="number" name="K" min="0" max="250" step="0.1" value="{{ prefill.K }}" required>
+            </label>
+        </div>
+
+        <h3 class="fieldset-title">Environmental Conditions</h3>
+        <div class="form-grid four">
+            <label>Temperature <span>C</span>
+                <input type="number" name="temperature" min="-10" max="60" step="0.1" value="{{ prefill.temperature }}" required>
+            </label>
+            <label>Humidity <span>%</span>
+                <input type="number" name="humidity" min="0" max="100" step="0.1" value="{{ prefill.humidity }}" required>
+            </label>
+            <label>Soil pH
+                <input type="number" name="ph" min="0" max="14" step="0.1" value="{{ prefill.ph }}" required>
+            </label>
+            <label>Rainfall <span>mm</span>
+                <input type="number" name="rainfall" min="0" max="400" step="0.1" value="{{ prefill.rainfall }}" required>
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <a class="button ghost" href="{{ url_for('history') }}">Load From History</a>
+            <button class="button" type="submit">Analyze & Recommend</button>
+        </div>
+    </form>
+</section>
+
+<section class="reference-section">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Reference table</p>
+            <h2>Mineral and Soil Ranges</h2>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Low</th>
+                    <th>Ideal</th>
+                    <th>High</th>
+                    <th>Why it matters</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in mineral_references %}
+                    <tr>
+                        <td><strong>{{ item.name }}</strong> ({{ item.unit }})</td>
+                        <td>{{ item.low }}</td>
+                        <td>{{ item.ideal }}</td>
+                        <td>{{ item.high }}</td>
+                        <td>{{ item.role }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="history-preview">
+    <div class="section-title">
+        <div>
+            <p class="eyebrow">Saved details</p>
+            <h2>Recent Recommendations</h2>
+        </div>
+        <a href="{{ url_for('history') }}">View all</a>
+    </div>
+    {% include "partials/history_table.html" %}
+</section>
+{% endblock %}
